@@ -30,6 +30,8 @@ class User extends CI_Controller {
     } 
         
     public function index(){}
+    
+    //method to allow users sign-in
     public function signup($firstname, $lastname, $email, $password){ 
         
         // hashing the password
@@ -50,6 +52,7 @@ class User extends CI_Controller {
 
     }
     
+    //Sign-in method
     public function signin($email, $password) {
         // hashing the password
         $password = md5($password);        
@@ -68,6 +71,7 @@ class User extends CI_Controller {
          
     }
     
+    //Method to update user record
     public function EditUser($objUser) {
         // convert JSON data to array
         $user_object = json_decode($objUser, True);
@@ -88,7 +92,7 @@ class User extends CI_Controller {
         
     }
     
-    
+    // Method to reset password
     public function ForgotPassword($email) {
         //generate user account token
         $token = $this->generateToken();
@@ -103,6 +107,7 @@ class User extends CI_Controller {
         }
     }
     
+    // Method to reset user password
     public function ResetPassword($email, $password, $token) {
         $this->sql = "Update User set password = '$password' where email = '$email' and token = '$token'";
         $bool = $this->database->insert2db($this->sql); 
@@ -111,6 +116,7 @@ class User extends CI_Controller {
         echo $this->dbFeedBack($bool);        
     }
     
+    // Method to delete a user
     public function DeleteUser($email) {
         
         $this->sql = "Delete from User where email = '$email'";
@@ -121,6 +127,7 @@ class User extends CI_Controller {
         
     }
     
+    // Method to get a user's information
     public function GetUser($email) {
         // sql statement
         $this->sql = "SELECT * FROM USER WHERE EMAIL = '$email'";
@@ -135,6 +142,7 @@ class User extends CI_Controller {
          echo $json;        
     }
     
+    // Method to verify user account
     public function VerifyUser($email) {
         // sql statement
         $this->sql = "SELECT * FROM USER WHERE EMAIL = '$email' AND isVerified = 1";
@@ -147,6 +155,7 @@ class User extends CI_Controller {
         
     }
     
+    // Method to report user
     public function ReportUser($UserId, $ReportedById) {
         // sql statement
         $this->sql = "SELECT * FROM USER WHERE ReportedById = '$ReportedById' AND UserId = '$UserId'";
@@ -159,6 +168,7 @@ class User extends CI_Controller {
         
     }
     
+    // Method to List User By UserType
     public function ListUserByUserType($UserType) {
         // sql statement
         $this->sql = "

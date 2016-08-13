@@ -13,6 +13,8 @@ class Group extends CI_Controller {
     
     public function index(){}
     
+    
+    // Add group method
     public function AddGroup($Name, $TeacherID, $Language, $Subject, $Description) {
 
         // sql statement
@@ -23,6 +25,7 @@ class Group extends CI_Controller {
         echo $this->dbFeedBack($bool);    
     }
 
+    //method to update class group
     public function UpdateGroup($objGroup) {
         // convert JSON data to array
         $group_object = json_decode($objGroup, True);
@@ -43,6 +46,7 @@ class Group extends CI_Controller {
     }
 
 
+    // method to delete a class group
     public function DeleteGroup($GroupID) {
         $this->sql = "Delete from groups where id = '$GroupID'";
         $bool = $this->database->insert2db($this->sql); 
@@ -51,7 +55,7 @@ class Group extends CI_Controller {
         echo $this->dbFeedBack($bool);          
     }
     
-    
+    // method to get group information
     public function GetGroup($GroupID) {
         // sql statement
         $this->sql = "SELECT * FROM groups WHERE id = '$GroupID'";
@@ -66,7 +70,7 @@ class Group extends CI_Controller {
          echo $json; 
     }
     
-    
+    //Displays group headed by a teacher
     public function ListGroupByTeacher($TeacherID) {
         // sql statement
         $this->sql = "SELECT * FROM groups WHERE teacherMasterId = '$TeacherID'";
@@ -81,6 +85,7 @@ class Group extends CI_Controller {
          echo $json; 
     }
     
+    // Add member to a group with q userid and groupid
     public function AddMember($GroupId, $UserId) {
         // sql statement
         $this->sql = "INSERT INTO GroupMembers VALUES ('$GroupId', '$UserId')";
@@ -90,6 +95,7 @@ class Group extends CI_Controller {
         echo $this->dbFeedBack($bool);            
     }
     
+    //Delete a member from a group
     public function DeleteMember($GroupId, $UserId) {
         // sql statement
         $this->sql = "Delete from GroupMembers where groupId = '$GroupId' and userId = '$UserId'";
@@ -100,9 +106,25 @@ class Group extends CI_Controller {
         
     }
     
+    // list group members by group id
     public function ListMembersByGroup($GroupId) {
         // sql statement
         $this->sql = "SELECT * FROM GroupMembers WHERE id = '$GroupId'";
+         
+        // query db method
+         $data = $this->database->db_query($this->sql);
+         
+        // encode the data into json
+         $json = json_encode($data);  
+
+        // output data in JSON
+         echo $json;              
+    }
+
+    // displays groups in the database
+    public function ListGroups() {
+        // sql statement
+        $this->sql = "SELECT groupName, teacherMasterId, languange, subject, description FROM Groups";
          
         // query db method
          $data = $this->database->db_query($this->sql);
